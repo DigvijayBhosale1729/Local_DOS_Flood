@@ -3,7 +3,7 @@ A simple Python script that carries out a DOS attack on a target in your local n
 
 The syntax is 
 
-python local_DOS_flood.py <Local IP of target>
+python local_DOS_flood.py Local_IP_of_target
 
 Play around with the size to see what suits your target network best
 
