@@ -6,6 +6,10 @@ New **main.py** file has been written by ChatGPT May 3 Version
 
 Required a lot of human prompts and refinement
 
+No pip installs necessary, just need to download nmap for your system: **https://nmap.org**
+
+
+
 Implemented:
 * **Multiprocessing** to scan the network and launch multiple processes for the DoS attack.
 * **Subprocess** module to execute nmap command and obtain a list of available IPs on the network.
