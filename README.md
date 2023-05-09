@@ -1,10 +1,15 @@
 # Local_DOS_Flood
-A simple Python script that carries out a DOS attack on a target in your local network. 
 
-The syntax is 
+**Forked from an old project**
 
-python local_DOS_flood.py Local_IP_of_target
+New **main.py** file has been written by ChatGPT May 3 Version
 
-Play around with the size to see what suits your target network best
+Required a lot of human prompts and refinement
 
-This tool is not supposed to be used to kick devices that do not belong to you, or on a network that does not belong to you.
+Implemented:
+* **Multiprocessing** to scan the network and launch multiple processes for the DoS attack.
+* **Subprocess** module to execute nmap command and obtain a list of available IPs on the network.
+* Function to get the **hostname** of the IPs that are being scanned.
+* Allows the user to **select** which IP address to target by entering the ID or last three digits of the IP address.
+* Allows the user to select the number of simultaneous **processes** to run for the DoS attack.
+* Handles **Keyboard Interrupt** exception by terminating the running processes and joining them back.
